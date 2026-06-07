@@ -23,5 +23,16 @@ namespace Infrastructure.Persistence.Repositories
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }
+
+        public async Task<Ticket?> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken)
+        {
+            return await dbContext.Tickets
+                .Include(t => t.Category)
+                .Include(t => t.Status)
+                .Include(t => t.Classification)
+                .Include(t => t.Attachments)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+        }
     }
 }

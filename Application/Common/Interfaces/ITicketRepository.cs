@@ -6,6 +6,8 @@ namespace Application.Common.Interfaces
     {
         Task<IEnumerable<Ticket>> GetAllWithDetailsAsync(CancellationToken cancellationToken);
 
+        Task<Ticket?> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken);
+
         Task<int> AddAsync(Ticket ticket, CancellationToken cancellationToken);
     }
 }
