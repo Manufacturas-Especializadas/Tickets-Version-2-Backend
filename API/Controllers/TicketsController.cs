@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Tickets.Commands.CreateTicket;
+using Application.Tickets.Queries.GetTicketById;
 using Application.Tickets.Queries.GetTickets;
 using Application.Users.Commands.UpdateTicketResolution;
 using MediatR;
@@ -20,6 +21,22 @@ namespace API.Controllers
             var tickets = await mediator.Send(query, cancellationToken);
 
             return Ok(tickets);
+        }
+
+        [HttpGet("details/{id}")]
+        public async Task<IActionResult> GetTicketById(int id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var query = new GetTicketByIdQuery(id);
+                var ticketDetail = await mediator.Send(query, cancellationToken);
+
+                return Ok(ticketDetail);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
         }
 
         [HttpPost("create")]
