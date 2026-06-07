@@ -1,11 +1,14 @@
 ﻿using Application.Common.Interfaces;
 using Azure.Storage.Blobs;
+using Infrastructure.Authentication;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Infrastructure
 {
@@ -17,11 +20,33 @@ namespace Infrastructure
                 options.UseSqlServer(configuration.GetConnectionString("Connection")));
 
             services.AddScoped<ITicketRepository, TicketRepository>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
 
             var blobConnectionString = configuration.GetConnectionString("AzureBlobStorage");
             services.AddSingleton(x => new BlobServiceClient(blobConnectionString));
 
             services.AddScoped<IFileStorageService, AzureBlobStorageService>();
+
+            services.AddScoped<IApplicationDbContext>(provider =>
+                    (IApplicationDbContext)provider.GetRequiredService<ApplicationDbContext>());
+
+            services.AddAuthentication(defaultScheme: "Bearer")
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = configuration["JwtSettings:Issuer"],
+                        ValidAudience = configuration["JwtSettings:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]!))
+                    };
+                });
+
+            services.AddAuthorization();
 
             return services;
         }
