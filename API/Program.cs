@@ -43,6 +43,8 @@ app.UseCors("AllowSpecificOrigins");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
 
