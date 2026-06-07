@@ -1,0 +1,38 @@
+﻿using Application.Common.Interfaces;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace Infrastructure.Persistence.Repositories
+{
+    public class TicketRepository(ApplicationDbContext dbContext) : ITicketRepository
+    {
+        public async Task<int> AddAsync(Ticket ticket, CancellationToken cancellationToken)
+        {
+            await dbContext.Tickets.AddAsync(ticket, cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            return ticket.Id;
+        }
+
+        public async Task<IEnumerable<Ticket>> GetAllWithDetailsAsync(CancellationToken cancellationToken)
+        {
+            return await dbContext.Tickets
+                .Include(t => t.Category)
+                .Include(t => t.Status)
+                .OrderByDescending(t => t.Id)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<Ticket?> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken)
+        {
+            return await dbContext.Tickets
+                .Include(t => t.Category)
+                .Include(t => t.Status)
+                .Include(t => t.Classification)
+                .Include(t => t.Attachments)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+        }
+    }
+}
