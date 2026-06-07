@@ -19,6 +19,7 @@ namespace Infrastructure.Persistence.Repositories
             return await dbContext.Tickets
                 .Include(t => t.Category)
                 .Include(t => t.Status)
+                .OrderByDescending(t => t.Id)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }
