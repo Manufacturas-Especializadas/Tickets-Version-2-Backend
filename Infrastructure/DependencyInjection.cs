@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.Common.Models;
 using Azure.Storage.Blobs;
 using Infrastructure.Authentication;
 using Infrastructure.Persistence;
@@ -22,6 +23,8 @@ namespace Infrastructure
             services.AddScoped<ITicketRepository, TicketRepository>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+            services.AddTransient<IEmailService, EmailService>();
 
             var blobConnectionString = configuration.GetConnectionString("AzureBlobStorage");
             services.AddSingleton(x => new BlobServiceClient(blobConnectionString));

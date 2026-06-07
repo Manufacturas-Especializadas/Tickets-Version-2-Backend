@@ -1,12 +1,15 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tickets.Commands.CreateTicket
 {
     public class CreateTicketCommandHandler(
         ITicketRepository ticketRepository,
-        IFileStorageService fileStorageService) : IRequestHandler<CreateTicketCommand, int>
+        IFileStorageService fileStorageService,
+        IEmailService emailService,
+        IApplicationDbContext dbContext) : IRequestHandler<CreateTicketCommand, int>
     {
         public async Task<int> Handle(CreateTicketCommand request, CancellationToken cancellationToken)
         {
@@ -40,6 +43,15 @@ namespace Application.Tickets.Commands.CreateTicket
             }
 
             await ticketRepository.AddAsync(ticket, cancellationToken);
+
+            string categoryName = "Sin categoría";
+            if (request.CategoryId.HasValue)
+            {
+                var category = await dbContext.Categories.FindAsync(new object[] { request.CategoryId.Value }, cancellationToken);
+                if (category != null) categoryName = category.Name;
+            }
+
+            await emailService.SendNewTicketNotificationAsync(ticket.Name, ticket.Department, ticket.Affair, categoryName);
 
             return ticket.Id;
         }
