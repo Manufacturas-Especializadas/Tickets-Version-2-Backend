@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories
 {
@@ -11,6 +12,15 @@ namespace Infrastructure.Persistence.Repositories
             await dbContext.SaveChangesAsync(cancellationToken);
 
             return ticket.Id;
+        }
+
+        public async Task<IEnumerable<Ticket>> GetAllWithDetailsAsync(CancellationToken cancellationToken)
+        {
+            return await dbContext.Tickets
+                .Include(t => t.Category)
+                .Include(t => t.Status)
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
     }
 }
