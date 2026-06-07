@@ -1,7 +1,8 @@
-﻿using Application.Tickets.Commands.CreateTicket;
-using Application.Common.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using Application.Common.Interfaces;
+using Application.Tickets.Commands.CreateTicket;
+using Application.Tickets.Queries.GetTickets;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
@@ -9,6 +10,16 @@ namespace API.Controllers
     [ApiController]
     public class TicketsController(IMediator mediator) : ControllerBase
     {
+        [HttpGet("getAll")]
+        public async Task<IActionResult> GetTickets(CancellationToken cancellationToken)
+        {
+            var query = new GetTicketsQuery();
+
+            var tickets = await mediator.Send(query, cancellationToken);
+
+            return Ok(tickets);
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateTicket([FromForm] CreateTicketRequest request, CancellationToken cancellationToken)
         {
