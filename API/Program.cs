@@ -1,5 +1,4 @@
-using Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+using Infrastructure;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,11 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-var connection = builder.Configuration.GetConnectionString("Connection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseSqlServer(connection);
-});
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddSwaggerGen(c =>
 {
