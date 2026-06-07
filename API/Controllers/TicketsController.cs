@@ -1,8 +1,10 @@
 ﻿using Application.Common.Interfaces;
 using Application.Tickets.Commands.CreateTicket;
 using Application.Tickets.Queries.GetTickets;
+using Application.Users.Commands.UpdateTicketResolution;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -44,6 +46,36 @@ namespace API.Controllers
             return CreatedAtAction(nameof(CreateTicket), new { id = ticketId }, new { TicketId = ticketId });
         }
 
+        [HttpPut("{id}/resolve")]
+        public async Task<IActionResult> ResolveTicket(int id, [FromBody] ResolveTicketRequest request)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int resolvingUserId))
+                {
+                    return Unauthorized(new { error = "Token inválido o no contiene el ID del usuario." });
+                }
+
+                var command = new UpdateTicketResolutionCommand(
+                    TicketId: id,
+                    ResolvingUserId: resolvingUserId,
+                    NewStatusId: request.StatusId,
+                    ClassificationId: request.ClassificationId,
+                    Solution: request.Solution
+                );
+
+                await mediator.Send(command);
+
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
+
         public record CreateTicketRequest(
             string Name,
             string? Department,
@@ -52,6 +84,12 @@ namespace API.Controllers
             int? CategoryId,
             int? UserId,
             IFormFileCollection? Files
+        );
+
+        public record ResolveTicketRequest(
+            int StatusId,
+            int? ClassificationId,
+            string? Solution
         );
     }
 }
