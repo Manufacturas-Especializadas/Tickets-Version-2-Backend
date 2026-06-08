@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Tickets.Commands.CreateTicket;
+using Application.Tickets.Commands.DeleteTicket;
 using Application.Tickets.Commands.UpdateTicketResolution;
 using Application.Tickets.Queries.ExportTickets;
 using Application.Tickets.Queries.GetCategorys;
@@ -105,6 +106,22 @@ namespace API.Controllers
                 );
 
                 await mediator.Send(command);
+
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteTicket(int id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var command = new DeleteTicketCommand(id);
+                await mediator.Send(command, cancellationToken);
 
                 return NoContent();
             }
