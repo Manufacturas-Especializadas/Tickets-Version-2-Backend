@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Tickets.Commands.CreateTicket;
+using Application.Tickets.Queries.ExportTickets;
 using Application.Tickets.Queries.GetTicketById;
 using Application.Tickets.Queries.GetTickets;
 using Application.Users.Commands.UpdateTicketResolution;
@@ -21,6 +22,15 @@ namespace API.Controllers
             var tickets = await mediator.Send(query, cancellationToken);
 
             return Ok(tickets);
+        }
+
+        [HttpGet("DownloadReport")]
+        public async Task<IActionResult> DownloadReport(CancellationToken cancellationToken)
+        {
+            var query = new ExportTicketsQuery();
+            var response = await mediator.Send(query, cancellationToken);
+
+            return File(response.FileContent, response.ContentType, response.FileName);
         }
 
         [HttpGet("details/{id}")]
