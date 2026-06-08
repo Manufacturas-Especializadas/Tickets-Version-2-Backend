@@ -17,23 +17,24 @@ namespace Application.Users.Commands.UpdateTicketResolution
                 throw new KeyNotFoundException($"El ticket con Id {request.TicketId} no existe.");
             }
 
-
-            ticket.UserId = request.ResolvingUserId;
             ticket.StatusId = request.NewStatusId;
 
-            if (!string.IsNullOrWhiteSpace(request.Solution))
-            {
-                ticket.Solution = request.Solution;
-            }
+            ticket.Solution = request.Solution;
+            ticket.ClassificationId = request.ClassificationId;
 
-            if (request.ClassificationId.HasValue)
+            if (request.NewStatusId == 3)
             {
-                ticket.ClassificationId = request.ClassificationId.Value;
-            }
+                if (ticket.ResolutionDate is null)
+                {
+                    ticket.ResolutionDate = DateTime.Now;
+                }
 
-            if (request.NewStatusId == 3 && ticket.ResolutionDate is null)
+                ticket.UserId = request.ResolvingUserId;
+            }
+            else
             {
-                ticket.ResolutionDate = DateTime.Now;
+                ticket.ResolutionDate = null;
+                ticket.UserId = null;
             }
 
             await dbContext.SaveChangesAsync(cancellationToken);
