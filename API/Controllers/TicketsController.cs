@@ -1,8 +1,11 @@
 ﻿using Application.Common.Interfaces;
 using Application.Tickets.Commands.CreateTicket;
+using Application.Tickets.Commands.DeleteTicket;
+using Application.Tickets.Commands.UpdateTicketResolution;
+using Application.Tickets.Queries.ExportTickets;
+using Application.Tickets.Queries.GetCategorys;
 using Application.Tickets.Queries.GetTicketById;
 using Application.Tickets.Queries.GetTickets;
-using Application.Users.Commands.UpdateTicketResolution;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -21,6 +24,25 @@ namespace API.Controllers
             var tickets = await mediator.Send(query, cancellationToken);
 
             return Ok(tickets);
+        }
+
+        [HttpGet("getCategory")]
+        public async Task<IActionResult> GetCategory(CancellationToken cancellationToken)
+        {
+            var query = new GetCategoryQuery();
+
+            var classifications = await mediator.Send(query, cancellationToken);
+
+            return Ok(classifications);
+        }
+
+        [HttpGet("DownloadReport")]
+        public async Task<IActionResult> DownloadReport(CancellationToken cancellationToken)
+        {
+            var query = new ExportTicketsQuery();
+            var response = await mediator.Send(query, cancellationToken);
+
+            return File(response.FileContent, response.ContentType, response.FileName);
         }
 
         [HttpGet("details/{id}")]
@@ -84,6 +106,22 @@ namespace API.Controllers
                 );
 
                 await mediator.Send(command);
+
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteTicket(int id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var command = new DeleteTicketCommand(id);
+                await mediator.Send(command, cancellationToken);
 
                 return NoContent();
             }

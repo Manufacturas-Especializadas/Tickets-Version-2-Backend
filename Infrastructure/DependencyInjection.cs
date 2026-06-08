@@ -25,6 +25,7 @@ namespace Infrastructure
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IExcelService, ExcelService>();
 
             var blobConnectionString = configuration.GetConnectionString("AzureBlobStorage");
             services.AddSingleton(x => new BlobServiceClient(blobConnectionString));
