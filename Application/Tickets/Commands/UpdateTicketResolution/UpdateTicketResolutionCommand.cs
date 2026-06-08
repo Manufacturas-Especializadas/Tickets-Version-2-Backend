@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Users.Commands.UpdateTicketResolution
+namespace Application.Tickets.Commands.UpdateTicketResolution
 {
     public record UpdateTicketResolutionCommand(
          int TicketId,

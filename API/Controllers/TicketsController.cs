@@ -1,11 +1,10 @@
 ﻿using Application.Common.Interfaces;
 using Application.Tickets.Commands.CreateTicket;
+using Application.Tickets.Commands.UpdateTicketResolution;
 using Application.Tickets.Queries.ExportTickets;
 using Application.Tickets.Queries.GetCategorys;
-using Application.Tickets.Queries.GetStatus;
 using Application.Tickets.Queries.GetTicketById;
 using Application.Tickets.Queries.GetTickets;
-using Application.Users.Commands.UpdateTicketResolution;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;

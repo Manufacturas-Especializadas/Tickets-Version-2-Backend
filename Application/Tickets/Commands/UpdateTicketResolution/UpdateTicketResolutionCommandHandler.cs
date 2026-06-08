@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 
-namespace Application.Users.Commands.UpdateTicketResolution
+namespace Application.Tickets.Commands.UpdateTicketResolution
 {
     public class UpdateTicketResolutionCommandHandler(IApplicationDbContext dbContext)
     : IRequestHandler<UpdateTicketResolutionCommand, Unit>
