@@ -28,7 +28,7 @@ namespace Infrastructure.Services
                     <div style='max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border: 1px solid #e2e8f0;'>
                 
                         <div style='background-color: #0071ab; padding: 24px; text-align: center;'>
-                            <h2 style='color: #ffffff; margin: 0; font-size: 20px; font-weight: 600; letter-spacing: 0.5px;'>Nuevo Ticket en MesaCore</h2>
+                            <h2 style='color: #ffffff; margin: 0; font-size: 20px; font-weight: 600; letter-spacing: 0.5px;'>Nuevo Ticket</h2>
                         </div>
 
                         <div style='padding: 32px 24px;'>
@@ -66,7 +66,7 @@ namespace Infrastructure.Services
                         </div>
 
                         <div style='background-color: #f1f5f9; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;'>
-                            <p style='margin: 0; font-size: 12px; color: #64748b;'>Este es un mensaje automático generado por el portal MesaCore.<br>Por favor, no respondas a este correo.</p>
+                            <p style='margin: 0; font-size: 12px; color: #64748b;'>Este es un mensaje automático generado por el portal de tickets.<br>Por favor, no respondas a este correo.</p>
                         </div>
                     </div>
                 </body>
