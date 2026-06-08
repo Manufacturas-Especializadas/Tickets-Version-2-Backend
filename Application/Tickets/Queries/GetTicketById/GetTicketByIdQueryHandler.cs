@@ -21,6 +21,8 @@ namespace Application.Tickets.Queries.GetTicketById
                 Department: ticket.Department,
                 Affair: ticket.Affair,
                 ProblemDescription: ticket.ProblemDescription,
+                StatusId: ticket.StatusId ?? 1,
+                ClassificationId: ticket.ClassificationId,
                 Solution: ticket.Solution,
                 Category: ticket.Category?.Name ?? "Sin categoría",
                 Status: ticket.Status?.Name ?? "Desconocido",
