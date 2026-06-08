@@ -1,6 +1,8 @@
 ﻿using Application.Common.Interfaces;
 using Application.Tickets.Commands.CreateTicket;
 using Application.Tickets.Queries.ExportTickets;
+using Application.Tickets.Queries.GetCategorys;
+using Application.Tickets.Queries.GetStatus;
 using Application.Tickets.Queries.GetTicketById;
 using Application.Tickets.Queries.GetTickets;
 using Application.Users.Commands.UpdateTicketResolution;
@@ -22,6 +24,16 @@ namespace API.Controllers
             var tickets = await mediator.Send(query, cancellationToken);
 
             return Ok(tickets);
+        }
+
+        [HttpGet("getCategory")]
+        public async Task<IActionResult> GetCategory(CancellationToken cancellationToken)
+        {
+            var query = new GetCategoryQuery();
+
+            var classifications = await mediator.Send(query, cancellationToken);
+
+            return Ok(classifications);
         }
 
         [HttpGet("DownloadReport")]
