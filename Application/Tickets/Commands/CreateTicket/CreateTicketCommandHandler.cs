@@ -25,7 +25,9 @@ namespace Application.Tickets.Commands.CreateTicket
                 ProblemDescription = request.ProblemDescription,
                 CategoryId = request.CategoryId,
                 UserId = request.UserId,
-                RegistrationDate = nowInMexico
+                RegistrationDate = nowInMexico,
+                StatusId = 1,
+                ResolutionDate = null
             };
 
             if (request.Attachments is not null && request.Attachments.Any())
