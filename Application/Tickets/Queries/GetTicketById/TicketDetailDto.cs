@@ -7,6 +7,8 @@
         string? Affair,
         string? ProblemDescription,
         string? Solution,
+        int StatusId,
+        int? ClassificationId,
         string Category,
         string Status,
         string? Classification,
