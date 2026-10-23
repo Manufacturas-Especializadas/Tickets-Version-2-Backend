@@ -76,8 +76,7 @@ namespace Infrastructure.Services
             {
                 "ulises.gonzalez@mesa.ms",
                 "juan.poblano@mesa.ms",
-                "saul.rodriguez@mesa.ms",
-                "jose.lugo@mesa.ms"
+                "cesar.alanis@mesa.ms",
             };
 
             var mailMessage = new MailMessage
