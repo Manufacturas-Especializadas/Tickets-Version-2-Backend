@@ -20,6 +20,7 @@ namespace Application.Tickets.Commands.UpdateTicketResolution
             ticket.StatusId = request.NewStatusId;
 
             ticket.Solution = request.Solution;
+            ticket.PublicComment = request.PublicComment;
             ticket.ClassificationId = request.ClassificationId;
 
             if (request.NewStatusId == 3)

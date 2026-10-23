@@ -14,7 +14,8 @@
         string? Classification,
         DateTime RegistrationDate,
         DateTime? ResolutionDate,
-        List<AttachmentDto> Attachments
+        List<AttachmentDto> Attachments,
+        string? PublicComment = null
     );
 
     public record AttachmentDto(

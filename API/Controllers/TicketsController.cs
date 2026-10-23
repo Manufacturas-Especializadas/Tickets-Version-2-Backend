@@ -4,10 +4,14 @@ using Application.Tickets.Commands.DeleteTicket;
 using Application.Tickets.Commands.UpdateTicketResolution;
 using Application.Tickets.Queries.ExportTickets;
 using Application.Tickets.Queries.GetCategorys;
+using Application.Tickets.Queries.GetPublicTicketById;
+using Application.Tickets.Queries.GetPublicTickets;
 using Application.Tickets.Queries.GetTicketById;
 using Application.Tickets.Queries.GetTickets;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace API.Controllers
@@ -16,6 +20,33 @@ namespace API.Controllers
     [ApiController]
     public class TicketsController(IMediator mediator) : ControllerBase
     {
+        [AllowAnonymous]
+        [HttpGet("public")]
+        public async Task<IActionResult> GetPublicTickets(CancellationToken cancellationToken)
+        {
+            var query = new GetPublicTicketsQuery();
+            var tickets = await mediator.Send(query, cancellationToken);
+
+            return Ok(tickets);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("public/{id}")]
+        public async Task<IActionResult> GetPublicTicketById(int id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var query = new GetPublicTicketByIdQuery(id);
+                var ticketDetail = await mediator.Send(query, cancellationToken);
+
+                return Ok(ticketDetail);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { error = ex.Message });
+            }
+        }
+
         [HttpGet("getAll")]
         public async Task<IActionResult> GetTickets(CancellationToken cancellationToken)
         {
@@ -102,7 +133,8 @@ namespace API.Controllers
                     ResolvingUserId: resolvingUserId,
                     NewStatusId: request.StatusId,
                     ClassificationId: request.ClassificationId,
-                    Solution: request.Solution
+                    Solution: request.Solution,
+                    PublicComment: request.PublicComment
                 );
 
                 await mediator.Send(command);
@@ -144,7 +176,8 @@ namespace API.Controllers
         public record ResolveTicketRequest(
             int StatusId,
             int? ClassificationId,
-            string? Solution
+            string? Solution,
+            [MaxLength(500)] string? PublicComment = null
         );
     }
 }

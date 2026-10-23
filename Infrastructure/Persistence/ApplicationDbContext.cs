@@ -94,6 +94,7 @@ namespace Infrastructure.Persistence
                 entity.Property(e => e.Affair).HasColumnName("affair").HasMaxLength(80);
                 entity.Property(e => e.ProblemDescription).HasColumnName("problemDescription").HasMaxLength(300);
                 entity.Property(e => e.Solution).HasColumnName("solution");
+                entity.Property(e => e.PublicComment).HasColumnName("publicComment").HasMaxLength(500).IsRequired(false);
 
                 entity.Property(e => e.RegistrationDate)
                       .HasColumnName("registrationDate")

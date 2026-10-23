@@ -22,6 +22,8 @@
 
         public string? Solution { get; set; }
 
+        public string? PublicComment { get; set; }
+
         public DateTime RegistrationDate { get; set; }
 
         public DateTime? ResolutionDate { get; set; }
