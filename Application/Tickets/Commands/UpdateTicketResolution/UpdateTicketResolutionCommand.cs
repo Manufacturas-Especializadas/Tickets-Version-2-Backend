@@ -7,6 +7,7 @@ namespace Application.Tickets.Commands.UpdateTicketResolution
          int ResolvingUserId,
          int NewStatusId,
          int? ClassificationId,
-         string? Solution
+         string? Solution,
+         string? PublicComment = null
      ) : IRequest<Unit>;
 }
