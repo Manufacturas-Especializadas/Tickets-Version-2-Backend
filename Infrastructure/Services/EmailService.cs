@@ -75,7 +75,7 @@ namespace Infrastructure.Services
             var recipients = new List<string>
             {
                 "ulises.gonzalez@mesa.ms",
-                "juan.poblano@mesa.ms",
+                "daniel.jasso@mesa.ms",
                 "cesar.alanis@mesa.ms",
             };
 
